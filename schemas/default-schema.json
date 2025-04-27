@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+      "username": { "type": "string" },
+      "email":    { "type": "string", "format": "email" },
+      "roles":    {
+        "type": "array",
+        "items": { "type": "string", "enum": ["user","admin","guest"] }
+      }
+    },
+    "required": ["username","email"],
+    "additionalProperties": false
+  }
+  

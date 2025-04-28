@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>PolluShield Demo</title>
+</head>
+<body>
+  <h1>PolluShield Prototype Pollution 차단 데모</h1>
+  <pre id="output"></pre>
+
+  <!-- UMD 번들 삽입 -->
+  <script src="pollushield.umd.js"></script>
+  <script>
+    // 테스트 오브젝트
+    const obj = {};
+    // 의도적 프로토타입 오염 시도
+    Object.assign(obj, { foo: "bar", __proto__: { isAdmin: true } });
+    // 결과를 화면에 표시
+    document.getElementById("output").textContent =
+      JSON.stringify(obj) + "\n" +
+      "obj.isAdmin: " + obj.isAdmin;
+  </script>
+</body>
+</html>

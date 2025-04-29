@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "init:tailwind": "tailwindcss init -p"
+    "init:tailwind": "tailwindcss init -p",
+    "test": "echo \"No tests for dashboard\" && exit 0"
   },
   "dependencies": {
     "react": "^19.0.0",

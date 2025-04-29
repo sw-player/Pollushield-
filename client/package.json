@@ -6,7 +6,8 @@
     "scripts": {
         "build:umd": "rollup -c rollup.config.js --environment FORMAT:umd",
         "build:esm": "rollup -c rollup.config.js --environment FORMAT:esm",
-        "build": "npm run build:umd && npm run build:esm"
+        "build": "npm run build:umd && npm run build:esm",
+        "test": "echo \"No tests for client\" && exit 0"
     },
     "dependencies": {
         "ajv": "^8.12.0",

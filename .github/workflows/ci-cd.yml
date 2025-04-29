@@ -1,0 +1,13 @@
+# .github/workflows/ci-cd.yml
+on:
+    push:       # main 브랜치 뿐 아니라
+      branches: # 모든 브랜치 푸시에도 실행해 봅니다
+        - '**'
+  
+  name: CI Test
+  jobs:
+    hello:
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "Hello, Actions!"
+  

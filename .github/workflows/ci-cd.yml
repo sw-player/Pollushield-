@@ -33,10 +33,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build & Push WS Server Image
+        env:
+            DOCKER_BUILDKIT: 0
         run: |
           docker build -f ws-server.Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/ws-server:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/ws-server:latest
       - name: Build & Push Dashboard Image
+        env:
+            DOCKER_BUILDKIT: 0    
         run: |
           docker build -f dashboard/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/dashboard:latest dashboard
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/dashboard:latest

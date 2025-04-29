@@ -1,0 +1,8 @@
+node_modules
+dashboard
+client
+demo
+.github
+.vscode
+*.log
+*.md

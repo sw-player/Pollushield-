@@ -1,19 +1,20 @@
 {
   "name": "dashboard",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
+    "lint": "eslint .",
     "init:tailwind": "tailwindcss init -p",
     "test": "echo \"No tests for dashboard\" && exit 0"
   },
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "recharts": "^2.15.3",
     "websocket": "^1.0.35"
   },

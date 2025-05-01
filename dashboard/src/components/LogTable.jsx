@@ -1,28 +1,25 @@
-import React from 'react';
-
 export default function LogTable({ logs }) {
   return (
-    <div className="overflow-auto">
-      <table className="min-w-full table-auto">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-4 py-2">시간</th>
-            <th className="px-4 py-2">IP</th>
-            <th className="px-4 py-2">유형</th>
-            <th className="px-4 py-2">페이로드</th>
+    <div className="overflow-auto max-h-80 border-neon rounded-lg">
+      <table className="w-full table-auto text-left text-sm">
+        <thead>
+          <tr className="border-b border-neon">
+            {['Time','IP','Type','Payload'].map(h => 
+              <th key={h} className="p-2 text-neon">{h}</th>
+            )}
           </tr>
         </thead>
         <tbody>
-          {logs.map((log, i) => (
-            <tr key={i} className="even:bg-gray-50">
-              <td className="px-4 py-2">{new Date(log.time).toLocaleTimeString()}</td>
-              <td className="px-4 py-2">{log.ip}</td>
-              <td className="px-4 py-2">{log.type}</td>
-              <td className="px-4 py-2"><code>{JSON.stringify(log.payload)}</code></td>
+          {logs.map((log,i) => (
+            <tr key={i} className={i%2 ? 'bg-[#111]' : ''}>
+              <td className="p-2">{log.time}</td>
+              <td className="p-2">{log.ip}</td>
+              <td className="p-2">{log.type}</td>
+              <td className="p-2">{JSON.stringify(log.payload)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
+  )
 }

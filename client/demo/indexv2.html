@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>PolluShield™ 차단 데모</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      background: #1a1a1a;
+      color: #eee;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    pre {
+      background: #222;
+      padding: 1rem;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+  </style>
+
+  <!-- ① UMD 번들 로드 -->
+  <script src="./pollushield.umd.js"></script>
+
+  <!-- ② default 래핑 풀기 & 보호 시작 로그 -->
+  <script>
+    if (window.PolluShield?.default) {
+      window.PolluShield = window.PolluShield.default;
+    }
+    console.log('[PolluShield] Protection enabled');
+  </script>
+
+  <!-- ③ 확장 훅 설치 -->
+  <script>
+    (function(window) {
+      const PS = window.PolluShield;
+      if (!PS || typeof PS.sanitize !== 'function') {
+        console.error('[PolluShield] 훅 설치 실1패');
+        return;
+      }
+      console.log('[PolluShield] 확장 훅이 설치되었습니다.');
+
+      const sanitize = PS.sanitize;
+
+      // Object.assign 훅
+      const _origAssign = Object.assign;
+      Object.assign = function(target, ...sources) {
+        const safe = sources.map(src => {
+          if (src && typeof src === 'object') {
+            try { sanitize(src); }
+            catch (e) {
+              console.warn('[PolluShield] Blocked payload:', e.message);
+              return {};
+            }
+          }
+          return src;
+        });
+        return _origAssign.call(Object, target, ...safe);
+      };
+
+      // Object.create 훅
+      const _origCreate = Object.create;
+      Object.create = function(proto, desc) {
+        let safeProto = proto;
+        if (proto && typeof proto === 'object') {
+          try { sanitize(proto); }
+          catch (e) {
+            console.warn('[PolluShield] Blocked prototype:', e.message);
+            safeProto = {};
+          }
+        }
+        let safeDesc = desc;
+        if (desc && typeof desc === 'object') {
+          try { sanitize(desc); }
+          catch (e) {
+            console.warn('[PolluShield] Blocked descriptors:', e.message);
+            safeDesc = undefined;
+          }
+        }
+        return _origCreate.call(Object, safeProto, safeDesc);
+      };
+
+      // Object.setPrototypeOf 훅
+      const _origSetProto = Object.setPrototypeOf;
+      Object.setPrototypeOf = function(obj, proto) {
+        let safeProto = proto;
+        if (proto && typeof proto === 'object') {
+          try { sanitize(proto); }
+          catch (e) {
+            console.warn('[PolluShield] Blocked setPrototypeOf:', e.message);
+            safeProto = Object.prototype;
+          }
+        }
+        return _origSetProto.call(Object, obj, safeProto);
+      };
+    })(window);
+  </script>
+</head>
+<body>
+  <h1>PolluShield™ 차단 데모</h1>
+  <pre id="output"></pre>
+
+  <!-- ④ 테스트 스크립트 -->
+  <script>
+    const obj = {};
+    Object.assign(obj, { foo: 'bar', __proto__: { admin: true } });
+
+    const o1 = Object.create({ __proto__: { hack: true } });
+    const o2 = {};
+    Object.setPrototypeOf(o2, { __proto__: { hack2: true } });
+
+    const out = [
+      JSON.stringify(obj, null, 2),
+      `obj.admin: ${obj.admin}`,
+      `o1.hack: ${o1.hack}`,
+      `o2.hack2: ${o2.hack2}`
+    ];
+    document.getElementById('output').textContent = out.join('\n\n');
+  </script>
+</body>
+</html>

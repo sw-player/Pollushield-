@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>PolluShield Demo</title>
+
+  <!-- ① UMD 번들 로드 -->
+  <script src="pollushield.umd.js"></script>
+
+  <!-- ② default 래핑 해제 & 시작 로그 -->
+  <script>
+    if (window.PolluShield?.default) {
+      window.PolluShield = window.PolluShield.default;
+    }
+  </script>
+
+  <!-- ③ 훅 설치 (Object.assign/create/setPrototypeOf 등 오버라이드) -->
+  <script>
+  (function(window) {
+    const PS = window.PolluShield;
+    if (!PS || typeof PS.sanitize !== 'function') {
+      console.error('[PolluShield] 확장 훅: sanitize 함수가 없습니다.');
+      return;
+    }
+    const sanitize = PS.sanitize;
+
+    // Object.assign 훅 예시
+    const _origAssign = Object.assign;
+    Object.assign = function(target, ...sources) {
+      const safe = sources.map(src => {
+        try {
+          sanitize(src);
+          return src;
+        } catch (e) {
+          console.warn('[PolluShield] Blocked payload:', e.message);
+          return {};
+        }
+      });
+      return _origAssign.call(Object, target, ...safe);
+    };
+
+    // (필요하면 Object.create, setPrototypeOf도 오버라이드)
+
+    console.log('[PolluShield] 확장 훅이 설치되었습니다.');
+  })(window);
+  </script>
+</head>
+<body>
+  <h1>PolluShield™ Prototype Pollution Block Demo</h1>
+  <pre id="output"></pre>
+
+  <!-- ④ 데모 테스트 스크립트 -->
+  <script>
+    const obj = {};
+    Object.assign(obj, { foo: "bar", __proto__: { hacked: true } });
+    document.getElementById('output').textContent =
+      JSON.stringify(obj) + "\nobj.hacked: " + obj.hacked;
+  </script>
+</body>
+</html>

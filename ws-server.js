@@ -12,17 +12,4 @@ wss.on('connection', ws => {
     console.log('받은 메시지:', msg.toString());
     ws.send(msg);
   });
-
-  // 2초마다 테스트 메시지 전송
-  const interval = setInterval(() => {
-    const data = {
-      time: Date.now(),
-      ip: '127.0.0.1',
-      type: 'pollution',
-      payload: { foo: 'bar' }
-    };
-    ws.send(JSON.stringify(data));
-  }, 2000);
-
-  ws.on('close', () => clearInterval(interval));
 });

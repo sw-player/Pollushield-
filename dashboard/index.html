@@ -1,13 +1,26 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!-- dashboard/index.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PolluShield™ Dashboard</title>
+
+  <!-- ① PolluShield UMD 번들 로드 -->
+  <script src="/pollushield.umd.js"></script>
+
+  <!-- ② default 래핑 풀기 & 보호 시작 로그 -->
+  <script>
+    if (window.PolluShield?.default) {
+      window.PolluShield = window.PolluShield.default;
+    }
+    console.log('[PolluShield] Protection enabled');
+  </script>
+
+  <!-- ④ React 앱 진입 -->
+  <script type="module" src="/src/main.jsx"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
 </html>

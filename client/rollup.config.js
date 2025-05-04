@@ -4,7 +4,7 @@ import json     from "@rollup/plugin-json";        // JSON import 지원
 import terser   from "@rollup/plugin-terser";
 
 export default {
-  input: "src/client.js",
+  input: "src/sanitize.js",
   output: [
     {
       file: "demo/pollushield.umd.js",
